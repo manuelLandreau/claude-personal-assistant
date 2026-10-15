@@ -105,6 +105,7 @@ Claude Code ne garde rien d'une session à l'autre : tout ce que l'assistant doi
 | `.claude/skills/veille/` | une méthode réutilisable, ici une veille techno | quand une demande s'y prête | skills |
 | `sources.md`, `veille/` | sujets suivis, un rapport par jour | par la skill veille | · |
 | `.claude/settings.json` | droits de nuit et hooks | au lancement, puis à chaud | · |
+| `.claude/notifications.json` | active les notifications push pour cette session seulement | au lancement (`--settings`) | · |
 | `.claude/hooks/garde-fou.sh`, `motifs-injection.txt` | le garde-fou anti-injection | à chaque appel d'outil concerné | · |
 | `session.txt` | l'historique des ID de session, écrit par un hook | en cas de crash | · |
 
@@ -155,7 +156,7 @@ Chaque commande ci-dessous empêche la machine de se mettre en veille tant que C
 
 ```bash
 cd ~/agent-autonome
-caffeinate -is claude --remote-control "Assistant"
+caffeinate -is claude --remote-control "Assistant" --settings .claude/notifications.json
 ```
 
 `-i` : pas de veille sur inactivité, `-s` : pas de veille système, sur secteur. Un portable dont on ferme l'écran se met quand même en veille, sauf branché à un écran externe.
@@ -165,7 +166,7 @@ caffeinate -is claude --remote-control "Assistant"
 ```bash
 cd ~/agent-autonome
 systemd-inhibit --what=idle:sleep:handle-lid-switch --who=claude --why="Assistant Claude" \
-  claude --remote-control "Assistant"
+  claude --remote-control "Assistant" --settings .claude/notifications.json
 ```
 
 `handle-lid-switch` empêche aussi la veille à la fermeture de l'écran d'un portable.
@@ -176,7 +177,7 @@ systemd-inhibit --what=idle:sleep:handle-lid-switch --who=claude --why="Assistan
 cd ~\agent-autonome
 $k = Add-Type -Name Power -Namespace Win32 -PassThru -MemberDefinition '[DllImport("kernel32.dll")] public static extern uint SetThreadExecutionState(uint f);'
 $k::SetThreadExecutionState(0x80000001) | Out-Null
-claude --remote-control "Assistant"
+claude --remote-control "Assistant" --settings .claude/notifications.json
 $k::SetThreadExecutionState(0x80000000) | Out-Null
 ```
 
@@ -207,7 +208,7 @@ macOS :
 
 ```bash
 cd ~/agent-autonome
-caffeinate -is claude --resume "$(tail -1 session.txt | awk '{print $NF}')" --remote-control "Assistant"
+caffeinate -is claude --resume "$(tail -1 session.txt | awk '{print $NF}')" --remote-control "Assistant" --settings .claude/notifications.json
 ```
 
 Linux :
@@ -215,14 +216,14 @@ Linux :
 ```bash
 cd ~/agent-autonome
 systemd-inhibit --what=idle:sleep:handle-lid-switch --who=claude --why="Assistant Claude" \
-  claude --resume "$(tail -1 session.txt | awk '{print $NF}')" --remote-control "Assistant"
+  claude --resume "$(tail -1 session.txt | awk '{print $NF}')" --remote-control "Assistant" --settings .claude/notifications.json
 ```
 
 Windows (PowerShell, après les deux lignes `$k` de l'étape 3) :
 
 ```powershell
 cd ~\agent-autonome
-claude --resume ((Get-Content session.txt -Tail 1) -split ' ')[-1] --remote-control "Assistant"
+claude --resume ((Get-Content session.txt -Tail 1) -split ' ')[-1] --remote-control "Assistant" --settings .claude/notifications.json
 ```
 
 Pourquoi pas `claude --continue` : il reprend la dernière conversation **du dossier**. Si tu as ouvert une autre session Claude dans `~/agent-autonome` entre-temps (pour modifier un fichier, par exemple), c'est elle qu'il reprend. `session.txt` ne se trompe pas.
@@ -240,7 +241,7 @@ Après une reprise, deux choses ne reviennent pas :
 
 1. **Ouvre l'app Claude**, connectée au même compte que la session.
 2. **Ouvre la session sur le téléphone.** Dans le terminal, `/remote-control` affiche un QR code. Scanne-le.
-3. **Active les notifications.** Dans le terminal, `/config`, puis active les deux réglages :
+3. **Les notifications.** Les commandes de lancement passent `--settings .claude/notifications.json`, qui active ces deux réglages pour la session de l'assistant, et pour elle seule :
 
 | Réglage | Qui déclenche | Exemple |
 |---|---|---|
@@ -249,7 +250,9 @@ Après une reprise, deux choses ne reviennent pas :
 
 Le premier, c'est l'assistant qui te parle. Le second, c'est l'assistant qui t'attend. Sans le second, une demande de permission le bloque jusqu'à ce que tu repasses par hasard dans l'app.
 
-> **Deux pièges.** Pas de push tant que tu tapes dans le terminal ou qu'il a le focus : teste depuis le téléphone, le terminal sur une autre fenêtre. Si `/config` affiche « No mobile registered », ouvre l'app Claude une fois pour qu'elle s'enregistre.
+Dans `/config`, laisse ces deux réglages **désactivés** : `/config` les écrit dans tes réglages globaux, et toutes tes sessions Claude Code, même celles de travail, t'enverraient alors des notifications. Les réglages passés par `--settings` l'emportent sur les réglages globaux, pour la seule session lancée avec.
+
+> **Trois pièges.** `/config` dans la session de l'assistant change aussi le réglage global : ne l'y utilise pas pour les notifications. Pas de push tant que tu tapes dans le terminal ou qu'il a le focus : teste depuis le téléphone, le terminal sur une autre fenêtre. Si `/config` affiche « No mobile registered », ouvre l'app Claude une fois pour qu'elle s'enregistre.
 
 - [ ] Depuis le téléphone, « envoie-moi une notification push de test », écran verrouillé : la notif arrive.
 - [ ] Depuis le téléphone, « crée un fichier test.txt » : une notif « action requise » arrive, tu valides depuis le téléphone. En mode auto, il le crée sans demander : c'est normal.
