@@ -26,9 +26,8 @@ externe() {
 
 case "$event" in
   PreToolUse)
-    grep -q 'garde-fou' <<<"$cmd$fichier" && ask "on touche au garde-fou lui-même."
-    [[ "$fichier" == */.claude/settings*.json || "$fichier" == */.claude/hooks/* ]] && ask "on modifie les réglages ou les hooks de l'assistant."
     [ -f "$alerte" ] || exit 0
+    grep -qE 'garde-fou|\.claude/(hooks|settings)' <<<"$cmd$fichier" && ask "injection détectée dans cette session, et ceci touche au garde-fou ou aux réglages."
     case "$tool" in
       Bash) grep -qE "$envoi" <<<"$cmd" && ask "injection détectée dans cette session, et cette commande peut envoyer dehors." ;;
       Write|Edit) [[ "$fichier" == */CLAUDE.md || "$fichier" == */.claude/* || "$fichier" == */memoire.md ]] && ask "injection détectée dans cette session, et ceci modifie sa mémoire ou ses consignes." ;;
