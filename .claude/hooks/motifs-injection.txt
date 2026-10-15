@@ -1,0 +1,18 @@
+ignore[^\n]{0,60}(previous|prior|above|earlier|all)[^\n]{0,30}(instructions?|prompts?|rules)
+disregard[^\n]{0,40}(instructions?|rules|guidelines|previous|above)
+forget[^\n]{0,30}(your|all|previous)[^\n]{0,20}(instructions?|rules|guidelines)
+you are now (a|an|the) 
+new instructions?\s*:
+system\s*(prompt\s*)?override|system\s*:\s*(prompt|command)
+</?system>
+\[\s*(system|assistant|internal)( message)?\s*\]
+(^|\n)\s*system\s*:
+do not[^\n]{0,40}tell the user
+<!--[^>]{0,512}(ignore|override|system|secret|hidden|instruction)
+ignor(e|ez|er)[^\n]{0,60}(instructions?|consignes?|règles)[^\n]{0,30}(précédentes|ci-dessus|antérieures|données)
+oubli(e|ez|er)[^\n]{0,30}(tes|vos|les|toutes)[^\n]{0,20}(instructions?|consignes?|règles)
+nouvel(le)?s? (instructions?|consignes?)\s*:
+tu es (maintenant|désormais) (un|une|le|la) 
+ne (le |lui )?(dis|dites) (rien|pas)[^\n]{0,20}(à|a) 
+\b(claude|assistant|agent|ia|ai)\b\s*[:,][^\n]{0,80}\b(supprime|efface|envoie|transf[eè]re|exécute|lance|delete|send|forward|execute|run)\b
+(curl|wget)[^\n]{0,200}\$\{?\w*(KEY|TOKEN|SECRET|PASSWORD)
