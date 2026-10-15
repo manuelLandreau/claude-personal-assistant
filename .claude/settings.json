@@ -11,22 +11,22 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "mcp__.*|Bash|Write|Edit",
+        "matcher": "mcp__.*|Bash|PowerShell|Write|Edit",
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/garde-fou.sh"
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/garde-fou.sh\""
           }
         ]
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "mcp__.*|WebFetch|WebSearch|Bash",
+        "matcher": "mcp__.*|WebFetch|WebSearch|Bash|PowerShell",
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/garde-fou.sh"
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/garde-fou.sh\""
           }
         ]
       }
@@ -36,7 +36,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '\"\\(now | strflocaltime(\"%Y-%m-%d %H:%M\")) \\(.source) \\(.session_id)\"' >> \"$CLAUDE_PROJECT_DIR\"/session.txt"
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/garde-fou.sh\""
           }
         ]
       }
