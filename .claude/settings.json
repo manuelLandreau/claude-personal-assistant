@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:*)",
+      "Edit(/veille/**)",
+      "Edit(/memoire.md)",
+      "Edit(/taches.md)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__.*|Bash",
+        "hooks": [{ "type": "command", "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/garde-fou.sh" }]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__.*|WebFetch|WebSearch",
+        "hooks": [{ "type": "command", "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/garde-fou.sh" }]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [{ "type": "command", "command": "jq -r '\"\\(now | strflocaltime(\"%Y-%m-%d %H:%M\")) \\(.source) \\(.session_id)\"' >> \"$CLAUDE_PROJECT_DIR\"/session.txt" }]
+      }
+    ]
+  }
+}
