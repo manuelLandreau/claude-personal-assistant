@@ -67,7 +67,7 @@ Un agent autonome, c'est une boucle (le modèle appelle un outil, lit le résult
       ├──────────────────────────►│  │ Session Claude Code            │  │
       │   messages, validations,  │  │  heartbeat : /loop 1h          │  │
       │   notifications push      │  │  shell · web · connecteurs     │  │
-                                  │  │  memoire.md · taches · skills   │  │
+                                  │  │  memoire.md · taches · skills    │  │
  Telegram / Signal (bonus) ──────►│  └────────────────────────────────┘  │
             Channels              └──────────────────────────────────────┘
 ```
