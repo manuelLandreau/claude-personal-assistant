@@ -1,0 +1,5 @@
+{
+  "name": "veilleur",
+  "description": "Réveille l'assistant dès qu'un fichier arrive dans boite/, sans attendre le heartbeat.",
+  "version": "1.0.0"
+}

@@ -5,7 +5,8 @@
       "WebFetch(domain:*)",
       "Edit(/veille/**)",
       "Edit(/memoire.md)",
-      "Edit(/taches.md)"
+      "Edit(/taches.md)",
+      "Edit(/boite/traites.txt)"
     ]
   },
   "hooks": {
@@ -22,7 +23,7 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "mcp__.*|WebFetch|WebSearch|Bash|PowerShell",
+        "matcher": "mcp__.*|WebFetch|WebSearch|Bash|PowerShell|Read",
         "hooks": [
           {
             "type": "command",

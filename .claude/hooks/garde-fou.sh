@@ -21,6 +21,7 @@ ask() {
 externe() {
   case "$tool" in
     WebFetch|WebSearch) return 0 ;;
+    Read) [[ "$fichier" == "$projet"/boite/* ]] ;;
     Bash|PowerShell) grep -qiE '(^|[;&|[:space:]])(gh|curl|wget|iwr|irm|Invoke-WebRequest|Invoke-RestMethod)[[:space:]]' <<<"$cmd" ;;
     mcp__*) grep -qE "$lecture" <<<"${tool##*__}" ;;
     *) return 1 ;;
