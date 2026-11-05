@@ -1,0 +1,7 @@
+[
+  {
+    "name": "boite",
+    "command": "sh \"${CLAUDE_PLUGIN_ROOT}/boite.sh\" \"${CLAUDE_PROJECT_DIR}/boite\"",
+    "description": "Nouveaux fichiers dans boite/"
+  }
+]
